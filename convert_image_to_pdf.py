@@ -33,8 +33,13 @@ def collect_images(input_path):
 def convert_to_pdf(input_path, output_path):
     """Convert one image or multiple images into a PDF."""
     images = collect_images(input_path)
-
     output_file = Path(output_path)
+
+    if output_file.suffix.lower() != ".pdf":
+        raise ValueError("Output file must have a .pdf extension.")
+
+    if output_file.exists() and output_file.is_dir():
+        raise ValueError("Output path must be a file, not a directory.")
 
     with output_file.open("wb") as pdf_file:
         pdf_file.write(img2pdf.convert([str(image) for image in images]))
